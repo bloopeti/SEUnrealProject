@@ -12,4 +12,4 @@ Saved
 *.xcodeproj
 *.xcworkspace
 
-Config/DefaultEngine.ini
+/Config/DefaultEngine.ini
