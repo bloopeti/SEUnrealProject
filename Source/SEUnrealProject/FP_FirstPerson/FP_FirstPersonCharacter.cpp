@@ -6,6 +6,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "MySaveGame.h"
 #include "GameFramework/PlayerController.h"
 
 #define COLLISION_WEAPON		ECC_GameTraceChannel1
@@ -64,6 +65,8 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	check(PlayerInputComponent);
 	
 	// Set up gameplay key bindings
+	InputComponent->BindAction("Save", IE_Pressed, this, &AFP_FirstPersonCharacter::SaveGame);
+	InputComponent->BindAction("Load", IE_Pressed, this, &AFP_FirstPersonCharacter::LoadGame);
 
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -263,4 +266,22 @@ void AFP_FirstPersonCharacter::TryEnableTouchscreenMovement(UInputComponent* Pla
 	PlayerInputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AFP_FirstPersonCharacter::BeginTouch);
 	PlayerInputComponent->BindTouch(EInputEvent::IE_Released, this, &AFP_FirstPersonCharacter::EndTouch);
 	PlayerInputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AFP_FirstPersonCharacter::TouchUpdate);	
+}
+
+void AFP_FirstPersonCharacter::SaveGame() {
+	
+	UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+
+	SaveGameInstance->PlayerLocation = this->GetActorLocation();
+
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("My slot"), 0);
+}
+
+void AFP_FirstPersonCharacter::LoadGame() {
+
+	UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+
+	SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("My slot"), 0));
+
+	this->SetActorLocation(SaveGameInstance->PlayerLocation);
 }
