@@ -1,0 +1,2 @@
+This is the documentation and diagrams for the project made by Kadar Tibor and Zavaczki Peter in Unreal Engine for the Software Engineering course of the Technical University of Cluj-Napoca.
+To find the complete project with all its data please go to the https://github.com/bloopeti/SEUnrealProject GitHub page and request a Pull.
